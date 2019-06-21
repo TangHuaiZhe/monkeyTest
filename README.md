@@ -1,7 +1,11 @@
 # monkeyTest
-环境:Python3.4以上
+**环境:**
 
-配置文件:Config.py
+Python3.4以上
+
+**配置文件:**
+
+`Config.py`
 
 `package_name`:测试的app包名
 
@@ -11,7 +15,12 @@
 
 `monkeyCmd`:monkey测试的具体命令,设置触摸百分比，点击次数此处修改
 
-Todo:
+
+**运行:**
+
+`python3.7 MonkeyTest.py`
+
+**Todo:**
 
 通过apk安装包自动找到adb可以跳转的Activity,写入配置
 
