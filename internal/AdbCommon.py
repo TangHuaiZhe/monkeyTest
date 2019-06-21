@@ -1,4 +1,4 @@
-# python module for interacting with adb
+# -*- coding: utf-8 -*-import os
 import os
 import time
 
@@ -18,21 +18,11 @@ class AndroidDebugBridge(object):
         results.close()
         return command_result
 
-    # check for any fastboot device
-    def fastboot(self, device_id):
-        pass
-
     # 检查设备
     def attached_devices(self):
         result = self.call_adb("devices")
         devices = result.partition('\n')[2].replace('\n', '').split('\tdevice')
         return [device for device in devices if len(device) > 2]
-
-    # 状态
-    def get_state(self):
-        result = self.call_adb("get-state")
-        result = result.strip(' \t\n\r')
-        return result or None
 
     # 重启
     def reboot(self, option):
@@ -50,14 +40,6 @@ class AndroidDebugBridge(object):
     def pull(self, remote, local):
         result = self.call_adb("pull %s %s" % (remote, local))
         return result
-
-    # 同步更新 很少用此命名
-    def sync(self, directory, **kwargs):
-        command = "sync %s" % directory
-        if 'list' in kwargs:
-            command += " -l"
-            result = self.call_adb(command)
-            return result
 
     # 打开指定app
     def open_app(self, packagename, activity, devices):
@@ -77,22 +59,32 @@ class AndroidDebugBridge(object):
         result = string.split(" ")
         return result[4]
 
-    # 判断测试的app的key是否在top
-    def isOnTop(self, pkg_name, key):
+    def isOnTop(self, pkg_name, moduleKey):
+        """
+        判断测试的app的module是否在top
+        :param pkg_name:测试app包名
+        :param moduleKey:app模块中关键词 todo 支持多个模块
+        :return:
+        """
         result = self.call_adb("shell dumpsys activity | grep mResumedActivity")
         if result == '':
             return "the process doesn't exist."
         print(result)
         if result.__contains__(pkg_name) and result.__contains__(
-                key) and (
-                result.__contains__("leakcanary") is False) and (
-                result.__contains__("com.alvin.wallet.ui.MainActivity") is False):
+                moduleKey) and (
+                result.__contains__("leakcanary") is False):
             return True
         else:
             return False
 
-    # 判断测试app是否在某个页面停留过久，防止测试卡死
     def isStopHow(self, startTime, currentActivity, seconds):
+        """
+        判断测试app是否在某个页面停留过久，防止测试卡死
+        :param startTime:开始计算的时间
+        :param currentActivity:当前前台的aty
+        :param seconds: 停留时间
+        :return:是否
+        """
         while currentActivity == self.call_adb("shell dumpsys activity | grep mResumedActivity"):
             end = time.time()
             print("同一页面持续测试时间:" + str(end - startTime))
