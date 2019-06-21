@@ -46,7 +46,7 @@ def start(devices):
 
     # monkey Log
     monkeyLogFile = os.path.join(logDir, "monkey.log")
-    monkeyConfig.monkeyCmd = "adb -s " + device + " shell " + monkeyConfig.monkeyCmd + monkeyLogFile
+    monkeyConfig.monkeyCmd = f"adb -s {device} shell {monkeyConfig.monkeyCmd + monkeyLogFile}"
 
     # 开始测试
     start_monkey(monkeyConfig.monkeyCmd, logDir)
@@ -71,13 +71,13 @@ def start(devices):
 
         with open(monkeyLogFile, "r", encoding='utf-8') as monkeyLog:
             if monkeyLog.read().count('Monkey finished') > 0:
-                print(str(device) + "\n测试完成咯")
+                print(f"{device}\n测试完成咯")
                 break
 
     with open(adbLogFileName, "r", encoding='utf-8') as logfile:
-        print(str(
-            device) + f"\n存在{logfile.read().count('FATAL EXCEPTION')}个Crash!!!! "
-                      f"查看{adbLogFileName}文件")
+        print(
+            f"{device}\n存在{logfile.read().count('FATAL EXCEPTION')}个Crash!!!!"
+            f"查看{adbLogFileName}文件")
 
 
 # 开始脚本测试
@@ -88,16 +88,16 @@ def start_monkey(monkeyCmd, logDir):
     """
 
     os.popen(monkeyCmd)
-    print("start_monkey" + monkeyCmd)
+    print(f"start_monkey {monkeyCmd}")
 
     # Monkey时手机日志,logcat
     logFileName = os.path.join(logDir, "logcat.log")
-    cmd2 = "adb logcat -d >%s" % logFileName
+    cmd2 = f"adb logcat -d >{logFileName}"
     os.popen(cmd2)
 
     # "导出traces文件 用于分析ANR"
     traceFilename = os.path.join(logDir, "anr_traces.log")
-    cmd3 = "adb shell cat /data/anr/traces.txt>%s" % traceFilename
+    cmd3 = f"adb shell cat /data/anr/traces.txt>{traceFilename}"
     os.popen(cmd3)
 
 

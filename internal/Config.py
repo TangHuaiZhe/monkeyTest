@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+
 class MonkeyConfig(object):
     # 测试的app包名
     package_name = "com.snda.wifilocating"
