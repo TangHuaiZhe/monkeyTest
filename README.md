@@ -1,7 +1,7 @@
 # monkeyTest
 **环境:**
 
-Python3.4以上
+Python3.6以上
 
 **配置文件:**
 
