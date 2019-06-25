@@ -3,6 +3,7 @@ import datetime
 import os
 import random
 import time
+import platform
 from multiprocessing import Pool
 from typing import Dict, Union
 from internal import AdbCommon
@@ -59,8 +60,7 @@ def start(devices):
             # 如果卡死 随机打开一个配置aty
             adb.open_app(monkeyConfig.package_name, monkeyConfig.activity[0],
                          device)
-        currentActivity = AndroidDebugBridge().call_adb(
-            "shell dumpsys activity | grep mResumedActivity")
+        currentActivity = AndroidDebugBridge().getCurrentAty()
         time.sleep(2)
 
         # 判断测试app是否在某个页面停留过久，防止测试卡死
@@ -108,6 +108,7 @@ def killPort():
 
 
 if __name__ == '__main__':
+    print(f"当前操作系统 {platform.system()}")
     killPort()
     time.sleep(1)
     runnerPool()

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-import os
 import os
+import platform
 import time
 
 
@@ -28,7 +29,7 @@ class AndroidDebugBridge(object):
     def reboot(self, option):
         command = "reboot"
         if len(option) > 7 and option in ("bootloader", "recovery",):
-            command = f"{command} { option.strip()}"
+            command = f"{command} {option.strip()}"
         self.call_adb(command)
 
     # 将电脑文件拷贝到手机里面
@@ -66,7 +67,7 @@ class AndroidDebugBridge(object):
         :param moduleKey:app模块中关键词 todo 支持多个模块
         :return:
         """
-        result = self.call_adb("shell dumpsys activity | grep mResumedActivity")
+        result = self.getCurrentAty()
         if result == '':
             return "the process doesn't exist."
         print(result)
@@ -74,6 +75,13 @@ class AndroidDebugBridge(object):
             return True
         else:
             return False
+
+    def getCurrentAty(self):
+        if platform.system() == "Windows":
+            result = self.call_adb("shell dumpsys activity | findstr mResumedActivity")
+        else:
+            result = self.call_adb("shell dumpsys activity | grep mResumedActivity")
+        return result
 
     def isStopHow(self, startTime, currentActivity, seconds):
         """
@@ -83,7 +91,7 @@ class AndroidDebugBridge(object):
         :param seconds: 停留时间
         :return:是否
         """
-        while currentActivity == self.call_adb("shell dumpsys activity | grep mResumedActivity"):
+        while currentActivity == self.getCurrentAty():
             end = time.time()
             print(f"同一页面持续测试时间: {(end - startTime)}")
             if end - startTime > seconds:
