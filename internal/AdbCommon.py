@@ -71,7 +71,7 @@ class AndroidDebugBridge(object):
         if result == '':
             return "the process doesn't exist."
         print(result)
-        if pkg_name in result and moduleKey in result and "leakcanary" not in result:
+        if (pkg_name in result and moduleKey in result and "leakcanary" not in result) or "WkBrowserActivity" in result or "CordovaWebActivity" in result:
             return True
         else:
             return False

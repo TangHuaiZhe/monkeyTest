@@ -3,7 +3,7 @@
 
 class MonkeyConfig(object):
     # 测试的app包名
-    package_name = "com.snda.wifilocating"
+    package_name = "com.sdpopen.demo"
 
     # 测试app中模块的关键词
     module_key = "com.sdpopen.wallet"
@@ -18,6 +18,6 @@ class MonkeyConfig(object):
                 "com.sdpopen.wallet.home.activity.RemainActivity",
                 "com.sdpopen.wallet.charge_transfer_withdraw.activity.WithdrawActivity"]
 
-    monkeyCmd = "monkey -p com.snda.wifilocating --throttle 300  " \
-                "--pct-appswitch 15 --pct-touch 30 --pct-motion 50 --pct-anyevent 5  " \
+    monkeyCmd = f"monkey -p {package_name} --throttle 300  " \
+                "--pct-appswitch 5 --pct-touch 30 --pct-motion 60 --pct-anyevent 5  " \
                 "--ignore-timeouts --ignore-crashes   --monitor-native-crashes -v -v -v 3000 > "
